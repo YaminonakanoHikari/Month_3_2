@@ -28,7 +28,6 @@ def main(page: ft.Page):
     def get_greeting(name: str) -> str:
     
 
-
         hour = datetime.now().hour++
 
 
