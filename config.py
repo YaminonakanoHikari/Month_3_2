@@ -1,1 +1,1 @@
-db_path = "db/todo.db"
+path_db = "db/todo.db"
