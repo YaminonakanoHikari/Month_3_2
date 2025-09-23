@@ -12,7 +12,7 @@ def main(page: ft.Page):
 
     def load_task():
         task_list.controls.clear()
-        for task_id, task_text, completed in main_db.get_tasks():
+        for task_id, task_text, completed in main_db.get_tasks(filter_type):
             # print(task_id, task_text)
             task_list.controls.append(create_task_row(task_id, task_text, completed))
 
@@ -51,19 +51,30 @@ def main(page: ft.Page):
     
 
     def add_task(_):
-        if task_input.value:
+        if task_input.value and len(task_input.value) <= 100:
             task = task_input.value
             task_id = main_db.add_task(task)
             task_list.controls.append(
                 create_task_row(task_id=task_id, task_text=task, completed=None)
             )
             task_input.value = ""
+            warning_text.value = ""  
+            page.update()
+        elif len(task_input.value) > 100:
+            warning_text.value = "Ошибка: Максимальная длина задачи 100 символов."
             page.update()
 
+    def on_task_input_change(e):
+        if len(e.control.value) > 100:
+            warning_text.value = "Ошибка: Максимальная длина задачи 100 символов."
+        else:
+            warning_text.value = ""
+        page.update()
 
 
     task_input = ft.TextField(label='Введите задачу', read_only=False, expand=True, on_submit=add_task)
     add_button = ft.ElevatedButton("ADD", on_click=add_task)
+    warning_text = ft.Text(value="", color=ft.Colors.RED)
 
     def set_filter(filter_value):
         nonlocal filter_type
@@ -81,7 +92,7 @@ def main(page: ft.Page):
     ], alignment=ft.MainAxisAlignment.SPACE_EVENLY)
 
     # page.add(task_input, add_button)
-    page.add(ft.Row([task_input, add_button], alignment=ft.MainAxisAlignment.SPACE_BETWEEN), filter_buttons, task_list)
+    page.add(ft.Row([task_input, add_button], alignment=ft.MainAxisAlignment.SPACE_BETWEEN), warning_text, filter_buttons, task_list)
 
     load_task()
 

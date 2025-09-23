@@ -62,3 +62,4 @@ def delete_task(task_id):
     cursor.execute(queries.DELETE_TASK, (task_id, ))
     conn.commit()
     conn.close()
+    
