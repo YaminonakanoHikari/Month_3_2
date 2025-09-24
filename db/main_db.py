@@ -45,10 +45,10 @@ def update_task(task_id: int, task_text: str = None, completed: int = None):
     conn = sqlite3.connect(path_db)
     cursor = conn.cursor()
 
-    if task_text is not None:  # редактирование текста
+    if task_text is not None:  
         cursor.execute(queries.UPDATE_TASK, (task_text, task_id))
 
-    if completed is not None:  # отметка выполненности
+    if completed is not None: 
         cursor.execute("UPDATE tasks SET completed = ? WHERE id = ?", (completed, task_id))
 
     conn.commit()
